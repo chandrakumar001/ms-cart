@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: ms-cart
-        image: localhost:50000/ms-project/ms-cart:latest
+        image: localhost:5000/ms-cart:latest
         imagePullPolicy: Always
         ports:
           - containerPort: 80

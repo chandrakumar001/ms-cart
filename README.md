@@ -8,6 +8,17 @@
 * [Cloudfoundry](#Cloudfoundry)
 * [Additional Information-Optional](#Additional-Information-Optional)
 
+#### Problem with shared your code
+* Lot of code mix with database layer and (service+controller) layer
+* The shared sampled code more difficult to maintenance and understanding code flow
+#### Solution with shared your code
+* According the layer approach, controller should not talk to directly into database layer
+  that means whenever write some service(API or endpoint), we have use DTO's(service+controller)
+  and database layer both are individual model class
+* More linear approach and easy to maintenance 
+* The controller also we have created new separate class such as CartEntry and Cart
+* Use mapper either Mapper class or MapStruct Library
+
 ## General info
 This project for ms-cart microservice and used lasted version spring boot, swagger(OpenAPI),Code Generator swagger.
 
@@ -81,7 +92,18 @@ GET  https://ms-cart.mybluemix.net/api/v1/child-transactions
     ibmcloud login -a https://cloud.ibm.com -u passcode -p <passcode>
     ibmcloud target --cf
     ibmcloud cf push  -f cloudfoundry/manifest.yml  --vars-file cloudfoundry/dev-vars.yml
+## Kubernetes
+    
+  At first time, application setup execute: 'kubectl-execute-dev.bat'
+  
+  This bat file having all configuration and apply the kubernetes cluster, this will step the such like <b>deployment,service,ingress,HPA,VPA and network policy</b>
+   
+<b>This application will be deploy kubernetes cluster via CI/CD pipleline</b>  
 
+refer: output folder
+
+        kubernate-pods-up.JPG
+         
 ##### Application Name:
 
      ms --->    means Microservice

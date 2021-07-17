@@ -69,23 +69,22 @@ pipeline {
         stage('Build Docker Image') {
 
             steps {
-                bat 'docker build . -t localhost:50000/ms-project/ms-cart:'+newVersion
-                bat 'docker build . -t localhost:50000/ms-project/ms-cart:'+newVersion
+                bat 'docker build . -t localhost:5000/ms-cart:'+newVersion
                 bat 'echo the image to docker'
-                bat 'docker push localhost:50000/ms-project/ms-cart:'+newVersion
+                bat 'docker push localhost:5000/ms-cart:'+newVersion
 
                 bat 'echo the latest image to docker'
-                bat 'docker tag localhost:50000/ms-project/ms-cart:'+newVersion+' localhost:50000/ms-project/ms-cart:latest'
-                bat 'docker push localhost:50000/ms-project/ms-cart:latest'
+                bat 'docker tag localhost:5000/ms-cart:'+newVersion+' localhost:5000/ms-cart:latest'
+                bat 'docker push localhost:5000/ms-cart:latest'
 
                 bat 'echo Delete the image from jenkins'
-                bat 'docker rmi -f localhost:50000/ms-project/ms-cart:'+newVersion+' localhost:50000/ms-project/ms-cart:latest'
+                bat 'docker rmi -f localhost:5000/ms-cart:'+newVersion+' localhost:5000/ms-cart:latest'
             }
         }
         // Deploy
         stage('Deploy') {
             steps {
-                bat 'kubectl set image deployment/ms-cart ms-cart=localhost:50000/ms-project/ms-cart:'+newVersion
+                bat 'kubectl set image deployment/ms-cart ms-cart=localhost:5000/ms-cart:'+newVersion
             }
         }
         //end

@@ -1,0 +1,31 @@
+application-description: project.description
+application-version: project.version
+
+spring:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings.trace: false
+      settings.web-allow-others: true
+  application:
+    name: ms-transactions
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password:
+    hikari:
+      auto-commit: true
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: 'create-drop'
+      jdbc.lob.non_contextual_creation: true
+      dialect: org.hibernate.dialect.H2Dialect
+springdoc:
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  swagger-ui:
+    path: '/swagger-ui.html'
+    operationsSorter: method

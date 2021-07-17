@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-cart
+  labels:
+    purpose: ms-cart
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ms-cart
+  template:
+    metadata:
+      name: ms-cart
+      labels:
+        app: ms-cart
+    spec:
+      containers:
+      - name: ms-cart
+        image: localhost:50000/ms-project/ms-cart:latest
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 80

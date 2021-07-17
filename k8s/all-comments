@@ -1,0 +1,22 @@
+################################################
+#       configmap                              #
+################################################
+kubectl create configmap  ms-cart-configmap  --from-env-file=k8s/06-env-config-dev.properties
+kubectl get configmap
+kubectl describe configmaps/ms-cart-configmap
+################################################
+#       secret                                #
+################################################
+kubectl create -f k8s/07- ms-cart-secret.yaml
+kubectl get secret  ms-cart-secret
+kubectl describe secret  ms-cart-secret
+kubectl delete secret  ms-cart-secret
+################################################
+#       cmd                                #
+################################################
+kubectl logs  ms-cart-5f86845cb6-j8dnb
+kubectl logs --tail=100  ms-cart-5f86845cb6-j8dnb
+kubectl get po -o wide
+kubectl rollout restart deployment/ms-cart
+kubectl port-forward  ms-cart-5f86845cb6-j8dnb 8081:8080
+kubectl scale --replicas=0 deployment/php-apache

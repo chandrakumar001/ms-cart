@@ -182,7 +182,7 @@ refer: output folder
 ##### Application Name:
 
      ms --->    means Microservice
-     transactions --> Application Name
+     cart --> Application Name
      Example: ms-cart
   
 

@@ -8,6 +8,10 @@ import java.util.Optional;
 
 public class AddressMapper {
 
+    private AddressMapper() {
+        throw new IllegalStateException("AddressMapper class");
+    }
+
     public static Optional<Address> mapToAddress(AddressDTO addressDTO) {
 
         if (Objects.isNull(addressDTO)) {

@@ -1,8 +1,9 @@
 package com.chandranedu.api.cart.controller;
 
+import com.chandranedu.api.cart.beans.Cart;
 import com.chandranedu.api.cart.dto.CartDTO;
 import com.chandranedu.api.cart.dto.CartEntryDTO;
-import com.chandranedu.api.cart.service.CartEntryService;
+import com.chandranedu.api.cart.service.CartService;
 import com.chandranedu.api.exception.CartEntryException;
 import com.chandranedu.api.exception.CartNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,50 +11,45 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import static com.chandranedu.api.cart.controller.Constant.*;
+import static com.chandranedu.api.cart.mapper.CartMapper.mapToCartDTO;
 
 @RestController
 public class CartEntryController {
 
-    public static final String CART_CODE = "cart-code";
-    private final CartEntryService cartEntryService;
+    private final CartService cartService;
 
     @Autowired
-    public CartEntryController(CartEntryService cartEntryService) {
-        this.cartEntryService = cartEntryService;
+    public CartEntryController(final CartService cartService) {
+        this.cartService = cartService;
     }
 
-    @PostMapping("api/v1/carts/{cart-code}/cart-entries")
+    @PostMapping(API_V1_CARTS_CODE_CART_ENTRIES)
     public ResponseEntity<CartDTO> addItemToCart(@PathVariable(name = CART_CODE) final String code,
                                                  @RequestBody final CartEntryDTO cartEntryDTO)
-            throws CartEntryException, CartNotFoundException {
+            throws CartNotFoundException, CartEntryException {
 
-        final CartDTO cartDTO = cartEntryService.addItemToCart(
-                code,
-                cartEntryDTO
+        final Cart cart = getAndPrepareCart(code);
+        final CartDTO cartDTO = cartService.addItemToCart(
+                cartEntryDTO,
+                cart
         );
         return new ResponseEntity<>(cartDTO, HttpStatus.OK);
     }
 
-    @GetMapping("api/v1/carts/{cart-code}/cart-entries")
-    public ResponseEntity<CartDTO> getCartsByCartCode(@PathVariable(name = CART_CODE) final String code)
+    @GetMapping(API_V1_CARTS_CODE_CART_ENTRIES)
+    public ResponseEntity<CartDTO> getCartsByCartCodeAndCartEntries(
+            @PathVariable(name = CART_CODE) final String code)
             throws CartNotFoundException {
 
-        final CartDTO cartDTO = cartEntryService.getCartsByCartCode(
-                code
-        );
+        final Cart cart = getAndPrepareCart(code);
+        final CartDTO cartDTO = mapToCartDTO(cart);
         return new ResponseEntity<>(cartDTO, HttpStatus.OK);
     }
 
-    @GetMapping("api/v1/carts/{cart-code}/cart-entries/{cart-entry-code}")
-    public ResponseEntity<CartDTO> getCartsByCartCodeAndEntries(@PathVariable(name = CART_CODE) final String code,
-                                                                @PathVariable("cart-entry-code") String cartEntryCode) throws CartEntryException, CartNotFoundException {
+    private Cart getAndPrepareCart(String code) throws CartNotFoundException {
 
-
-        final CartDTO cartDTO = cartEntryService.getCartsByCartCodeAndEntries(
-                code
-        );
-        return new ResponseEntity<>(cartDTO, HttpStatus.OK);
+        return cartService.findCartByCode(code)
+                .orElseThrow(() -> new CartNotFoundException(CART_NOT_FOUND));
     }
 }
-

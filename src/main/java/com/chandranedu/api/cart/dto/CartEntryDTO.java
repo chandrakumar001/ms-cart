@@ -9,5 +9,5 @@ public class CartEntryDTO {
 
     private String cartEntryCode;
     private Long quantity;
-    private BigDecimal total;
+    private BigDecimal price;
 }

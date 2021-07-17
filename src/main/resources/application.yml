@@ -20,7 +20,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: 'create-drop'
+      ddl-auto: none
       jdbc.lob.non_contextual_creation: true
       dialect: org.hibernate.dialect.H2Dialect
 springdoc:

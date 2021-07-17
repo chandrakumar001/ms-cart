@@ -11,6 +11,7 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Data
+@Table(name = "cart", schema = "cart")
 public class Cart {
 
     @Id

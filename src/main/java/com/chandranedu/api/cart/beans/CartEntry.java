@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 
 @Entity
 @Data
+@Table(name = "cart_entry", schema = "cart")
 public class CartEntry {
 
     @Id

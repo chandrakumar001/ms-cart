@@ -6,18 +6,39 @@
 * [Setup](#setup)
 * [Application URL Swagger](#Application-URL-Swagger)
 * [Cloudfoundry](#Cloudfoundry)
+* [Kubernetes](#Kubernetes)
 * [Additional Information-Optional](#Additional-Information-Optional)
 
-#### Problem with shared your code
-* Lot of code mix with database layer and (service+controller) layer
-* The shared sampled code more difficult to maintenance and understanding code flow
+### Task
+
+To develop an API which is able to do the below activities.
+
+ 1. Create a new cart for a Registered user/customer  `DONE`
+     
+        POST ​/api​/v1​/carts
+ 2. Create a cart entry for the cart of the user/customer `DONE`
+    
+        POST ​/api​/v1​/carts​/{cart-code}​/cart-entries
+ 
+ 3. View cart entry of the cart of the user/customer `DONE`
+       
+        GET ​/api​/v1​/carts​/{cart-code}​/cart-entries
+ 
+#### TBD
+ * Validation yet be implements
+ * As per our discussion, not required to implements user/customer module
+
+#### Problem Identified with shared code
+
+- [ ] Lot of code mix with database layer and (service+controller) layer
+- [ ] The sampled code more difficult to maintenance and understanding code flow
 #### Solution with shared your code
-* According the layer approach, controller should not talk to directly into database layer
+- [x] According the layer approach, controller should not talk to directly into database layer
   that means whenever write some service(API or endpoint), we have use DTO's(service+controller)
   and database layer both are individual model class
-* More linear approach and easy to maintenance 
-* The controller also we have created new separate class such as CartEntry and Cart
-* Use mapper either Mapper class or MapStruct Library
+- [x] More linear approach and easy to maintenance 
+- [x] The controller also we have created new separate class such as CartEntry and Cart
+- [x] Use mapper either Mapper class or MapStruct Library
 
 ## General info
 This project for ms-cart microservice and used lasted version spring boot, swagger(OpenAPI),Code Generator swagger.

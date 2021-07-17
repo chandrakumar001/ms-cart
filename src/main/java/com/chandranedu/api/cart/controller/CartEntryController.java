@@ -6,6 +6,7 @@ import com.chandranedu.api.cart.dto.CartEntryDTO;
 import com.chandranedu.api.cart.service.CartService;
 import com.chandranedu.api.exception.CartEntryException;
 import com.chandranedu.api.exception.CartNotFoundException;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import static com.chandranedu.api.cart.controller.Constant.*;
 import static com.chandranedu.api.cart.mapper.CartMapper.mapToCartDTO;
 
 @RestController
+@Tag(name = "cart entry api")
 public class CartEntryController {
 
     private final CartService cartService;
@@ -34,7 +36,7 @@ public class CartEntryController {
                 cartEntryDTO,
                 cart
         );
-        return new ResponseEntity<>(cartDTO, HttpStatus.OK);
+        return new ResponseEntity<>(cartDTO, HttpStatus.CREATED);
     }
 
     @GetMapping(API_V1_CARTS_CODE_CART_ENTRIES)

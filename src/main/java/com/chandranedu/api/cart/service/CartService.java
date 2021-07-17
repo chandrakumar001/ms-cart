@@ -3,6 +3,7 @@ package com.chandranedu.api.cart.service;
 
 import com.chandranedu.api.cart.beans.Cart;
 import com.chandranedu.api.cart.beans.CartEntry;
+import com.chandranedu.api.cart.dto.CartBareDTO;
 import com.chandranedu.api.cart.dto.CartDTO;
 import com.chandranedu.api.cart.dto.CartEntryDTO;
 import com.chandranedu.api.cart.mapper.CartMapper;
@@ -11,6 +12,7 @@ import com.chandranedu.api.exception.CartEntryException;
 import com.chandranedu.api.exception.CartNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -25,6 +27,7 @@ import static com.chandranedu.api.cart.mapper.CartMapper.mapToCart;
 import static com.chandranedu.api.cart.mapper.CartMapper.mapToCartDTO;
 
 @Service
+@Transactional
 public class CartService {
 
     private final CartRepository cartRepository;
@@ -46,10 +49,10 @@ public class CartService {
                 .collect(Collectors.toList());
     }
 
-    public CartDTO saveCart(final CartDTO cartDTO) {
+    public CartDTO saveCart(final CartBareDTO cartBareDTO) {
 
         //TODO cart validation
-        final Cart cart = mapToCart(cartDTO);
+        final Cart cart = mapToCart(cartBareDTO);
         final Cart cartDB = cartRepository.save(cart);
         return mapToCartDTO(cartDB);
     }

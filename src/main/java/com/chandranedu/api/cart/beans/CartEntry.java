@@ -11,7 +11,8 @@ import java.math.BigDecimal;
 public class CartEntry {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cart_entry_seq")
+    @SequenceGenerator(name = "cart_entry_seq", sequenceName = "cart_entry_seq", initialValue = 1, allocationSize = 1)
     private Long id;
     private String code;
     private BigDecimal total;

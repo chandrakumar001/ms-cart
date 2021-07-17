@@ -15,7 +15,8 @@ import static javax.persistence.FetchType.LAZY;
 public class Cart {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cart_seq")
+    @SequenceGenerator(name = "cart_seq", sequenceName = "cart_seq", initialValue = 1, allocationSize = 1)
     private Long id;
     private String code;
     private BigDecimal total;

@@ -7,6 +7,7 @@ import com.chandranedu.api.cart.repository.CartEntryRepository;
 import com.chandranedu.api.exception.EntryNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -15,6 +16,7 @@ import java.util.Optional;
 import static com.chandranedu.api.cart.controller.Constant.ENTRY_NOT_FOUND;
 
 @Service
+@Transactional
 public class CartEntryService {
 
     private final CartEntryRepository cartEntryRepository;
@@ -31,12 +33,8 @@ public class CartEntryService {
 
     public CartEntry addItemInCart(final CartEntryDTO entryDTO,
                                    final Cart cart) {
-        CartEntry cartEntry = new CartEntry();
-        cartEntry.setCart(cart);
-        cartEntry.setCode(entryDTO.getCartEntryCode());
-        cartEntry.setQuantity(entryDTO.getQuantity());
-        cartEntry.setTotal(getTotal(entryDTO));
 
+        CartEntry cartEntry = mapToCartEntry(entryDTO, cart);
         saveCartEntry(cartEntry);
         return cartEntry;
     }
@@ -56,16 +54,27 @@ public class CartEntryService {
         return Optional.of(entry);
     }
 
-    private BigDecimal getTotal(CartEntryDTO entryDTO) {
-        return entryDTO.getPrice().multiply(BigDecimal.valueOf(entryDTO.getQuantity()))
-                .setScale(2, RoundingMode.HALF_UP);
-    }
-
     public CartEntry saveCartEntry(CartEntry entry) {
         return cartEntryRepository.save(entry);
     }
 
     private static EntryNotFoundException entryNotFoundException() {
         return new EntryNotFoundException(ENTRY_NOT_FOUND);
+    }
+
+    private static CartEntry mapToCartEntry(CartEntryDTO entryDTO,
+                                            Cart cart) {
+
+        CartEntry cartEntry = new CartEntry();
+        cartEntry.setCart(cart);
+        cartEntry.setCode(entryDTO.getCartEntryCode());
+        cartEntry.setQuantity(entryDTO.getQuantity());
+        cartEntry.setTotal(getTotal(entryDTO));
+        return cartEntry;
+    }
+
+    private static BigDecimal getTotal(CartEntryDTO entryDTO) {
+        return entryDTO.getPrice().multiply(BigDecimal.valueOf(entryDTO.getQuantity()))
+                .setScale(2, RoundingMode.HALF_UP);
     }
 }

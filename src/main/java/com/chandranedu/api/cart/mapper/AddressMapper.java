@@ -1,6 +1,7 @@
 package com.chandranedu.api.cart.mapper;
 
 import com.chandranedu.api.cart.beans.Address;
+import com.chandranedu.api.cart.dto.AddressBareDTO;
 import com.chandranedu.api.cart.dto.AddressDTO;
 
 import java.util.Objects;
@@ -12,7 +13,7 @@ public class AddressMapper {
         throw new IllegalStateException("AddressMapper class");
     }
 
-    public static Optional<Address> mapToAddress(AddressDTO addressDTO) {
+    public static Optional<Address> mapToAddress(AddressBareDTO addressDTO) {
 
         if (Objects.isNull(addressDTO)) {
             return Optional.empty();
@@ -26,12 +27,12 @@ public class AddressMapper {
         return Optional.of(address);
     }
 
-    public static Optional<AddressDTO> mapToAddressDTO(Address address) {
+    public static Optional<AddressBareDTO> mapToAddressBareDTO(Address address) {
 
         if (Objects.isNull(address)) {
             return Optional.empty();
         }
-        AddressDTO addressDTO = new AddressDTO();
+        AddressBareDTO addressDTO = new AddressBareDTO();
         addressDTO.setName(address.getName());
         addressDTO.setPostalCode(address.getPostalCode());
         addressDTO.setStreetName(address.getStreetName());
@@ -39,4 +40,23 @@ public class AddressMapper {
         addressDTO.setCountry(address.getCountry());
         return Optional.of(addressDTO);
     }
+
+    public static Optional<AddressDTO> mapToAddressDTO(Address address) {
+
+        if (Objects.isNull(address)) {
+            return Optional.empty();
+        }
+        AddressBareDTO addressBareDTO = new AddressBareDTO();
+        addressBareDTO.setName(address.getName());
+        addressBareDTO.setPostalCode(address.getPostalCode());
+        addressBareDTO.setStreetName(address.getStreetName());
+        addressBareDTO.setStreetNumber(address.getStreetNumber());
+        addressBareDTO.setCountry(address.getCountry());
+
+        AddressDTO addressDTO = new AddressDTO();
+        addressDTO.setAddress(addressBareDTO);
+        addressDTO.setId(address.getId());
+        return Optional.of(addressDTO);
+    }
+
 }

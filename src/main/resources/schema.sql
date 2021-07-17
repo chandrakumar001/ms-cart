@@ -1,6 +1,7 @@
 create SCHEMA cart;
-create sequence hibernate_sequence increment 1 start 1 minvalue 1;
---create sequence cart.hibernate_sequence increment 1 start 1 minvalue 1;
+create sequence address_seq start with 1 increment by 1;
+create sequence cart_entry_seq start with 1 increment by 1;
+create sequence cart_seq start with 1 increment by 1;
 create table cart.address (id bigint not null, country varchar(255), name varchar(255), postal_code varchar(255), street_name varchar(255), street_number varchar(255), primary key (id));
 create table cart.cart (id bigint not null, code varchar(255), discounts decimal(19,2), subtotal decimal(19,2), total decimal(19,2), total_tax decimal(19,2), address_billing_id bigint, address_shipping_id bigint, primary key (id));
 create table cart.cart_entry (id bigint not null, code varchar(255), quantity bigint, total decimal(19,2), cart_id bigint, primary key (id));

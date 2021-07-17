@@ -27,11 +27,13 @@ To develop an API which is able to do the below activities.
 #### TBD
  * Validation yet be implements
  * As per our discussion, not required to implements user/customer module
-
+ * Unit test and Integration test yet be implements
+ 
 #### Problem Identified with shared code
 
 - [ ] Lot of code mix with database layer and (service+controller) layer
 - [ ] The sampled code more difficult to maintenance and understanding code flow
+
 #### Solution with shared your code
 - [x] According the layer approach, controller should not talk to directly into database layer
   that means whenever write some service(API or endpoint), we have use DTO's(service+controller)
@@ -103,11 +105,63 @@ https://ms-cart.mybluemix.net/h2-console/
     password: <empty>
       
 
-GET  https://ms-cart.mybluemix.net/api/v1/child-transactions
-    show all list of child-transactions
+POST ​/api​/v1​/carts create new cart
+
+Payload:
     
-    refer output folder :: "get-person.PNG"
+    {
+      "total": 50,
+      "totalTax": 48,
+      "subtotal": 8,
+      "discounts": 0,
+      "billingAddress": {
+        "streetName": "Avenger street",
+        "streetNumber": "11",
+        "name": "Iron Man",
+        "postalCode": "11111",
+        "country": "Germany"
+      },
+      "shippingAddress": {
+       "streetName": "DC street",
+        "streetNumber": "11",
+        "name": "Super Man",
+        "postalCode": "11111",
+        "country": "Germany"
+      },
+      "entriesList": [
+        {
+          "cartEntryCode": "12345_1_1",
+          "quantity": 10,
+          "price": 25
+        }, {
+          "cartEntryCode": "12345_1_2",
+          "quantity": 1,
+          "price": 23
+        }
+      ]
+    }
     
+    refer output folder :: "post-cart-creaton.JPG"
+
+GET ​/api​/v1​/carts get all created carts
+
+    refer output folder :: "get-all-created-cart.JPG"
+
+GET ​/api​/v1​/carts​/{cart-code}​/cart-entries
+    
+    refer output folder :: "get-all-cart-entries-for-cart.JPG"
+
+POST ​/api​/v1​/carts​/{cart-code}​/cart-entries
+   request payload 
+   
+     {
+            "cartEntryCode": "12345_7_1",
+            "quantity": 1,
+            "price": 5
+      }
+          
+    refer output folder :: "add-existing-cart-into-entry.JPG"
+        
 ## Cloudfoundry
 
     ibmcloud login -a https://cloud.ibm.com -u passcode -p <passcode>
@@ -160,3 +214,7 @@ Show all apps:
         ibmcloud cf app ms-cart   
         ibmcloud cf logs ms-cart
         ibmcloud cf delete ms-cart
+
+#### Jenkins file
+
+  here used only windows configuration         

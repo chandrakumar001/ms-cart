@@ -3,16 +3,14 @@ package com.chandranedu.api.cart.mapper;
 import com.chandranedu.api.cart.beans.Address;
 import com.chandranedu.api.cart.beans.Cart;
 import com.chandranedu.api.cart.beans.CartEntry;
-import com.chandranedu.api.cart.dto.AddressDTO;
-import com.chandranedu.api.cart.dto.CartDTO;
-import com.chandranedu.api.cart.dto.CartEntryDTO;
+import com.chandranedu.api.cart.dto.*;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.chandranedu.api.cart.mapper.AddressMapper.mapToAddress;
-import static com.chandranedu.api.cart.mapper.AddressMapper.mapToAddressDTO;
+import static com.chandranedu.api.cart.mapper.AddressMapper.mapToAddressBareDTO;
 import static com.chandranedu.api.cart.mapper.CartEntryMapper.mapToCartEntry;
 
 public class CartMapper {
@@ -26,30 +24,38 @@ public class CartMapper {
         if (Objects.isNull(cart)) {
             return null;
         }
-        final Optional<AddressDTO> billingAddressDTO = mapToAddressDTO(
+        final Optional<AddressBareDTO> billingAddressDTO = mapToAddressBareDTO(
                 cart.getBillingAddress()
         );
-        final Optional<AddressDTO> shippingAddressDTO = mapToAddressDTO(
+        final Optional<AddressBareDTO> shippingAddressDTO = mapToAddressBareDTO(
                 cart.getShippingAddress()
         );
         final List<CartEntryDTO> entriesListDTO = getCartEntryDTO(
                 cart.getEntriesList()
         );
 
+        CartBareDTO cartBareDTO = new CartBareDTO();
+        cartBareDTO.setBillingAddress(billingAddressDTO.orElse(null));
+        cartBareDTO.setShippingAddress(shippingAddressDTO.orElse(null));
+        cartBareDTO.setDiscounts(cart.getDiscounts());
+        cartBareDTO.setEntriesList(entriesListDTO);
+        cartBareDTO.setTotal(cart.getTotal());
+        cartBareDTO.setTotalTax(cart.getTotal());
+        cartBareDTO.setSubtotal(cart.getSubtotal());
+        return mapToCartDTO(cart.getCode(), cartBareDTO);
+    }
+
+    private static CartDTO mapToCartDTO(String cartCode,
+                                        CartBareDTO cartBareDTO) {
+
         CartDTO cartDTO = new CartDTO();
-        cartDTO.setBillingAddress(billingAddressDTO.orElse(null));
-        cartDTO.setShippingAddress(shippingAddressDTO.orElse(null));
-        cartDTO.setCode(cart.getCode());
-        cartDTO.setDiscounts(cart.getDiscounts());
-        cartDTO.setEntriesList(entriesListDTO);
-        cartDTO.setTotal(cart.getTotal());
-        cartDTO.setTotalTax(cart.getTotal());
-        cartDTO.setSubtotal(cart.getSubtotal());
+        cartDTO.setCode(cartCode);
+        cartDTO.setCart(cartBareDTO);
         return cartDTO;
     }
 
-    private static List<CartEntry> getCartEntrys(List<CartEntryDTO> entriesList,
-                                                 Cart cart) {
+    private static List<CartEntry> getCartEntry(List<CartEntryDTO> entriesList,
+                                                Cart cart) {
 
         if (CollectionUtils.isEmpty(entriesList)) {
             return Collections.emptyList();
@@ -70,21 +76,21 @@ public class CartMapper {
                 .collect(Collectors.toList());
     }
 
-    public static Cart mapToCart(CartDTO cartDTO) {
+    public static Cart mapToCart(CartBareDTO cartBareDTO) {
 
-        final Optional<Address> shippingAddress = mapToAddress(cartDTO.getShippingAddress());
-        final Optional<Address> billingAddress = mapToAddress(cartDTO.getBillingAddress());
+        final Optional<Address> shippingAddress = mapToAddress(cartBareDTO.getShippingAddress());
+        final Optional<Address> billingAddress = mapToAddress(cartBareDTO.getBillingAddress());
         Cart cart = new Cart();
-        final List<CartEntry> cartEntryList = CartMapper.getCartEntrys(
-                cartDTO.getEntriesList(),
+        final List<CartEntry> cartEntryList = CartMapper.getCartEntry(
+                cartBareDTO.getEntriesList(),
                 cart
         );
         cart.setCode("Cart-" + UUID.randomUUID().toString());
-        cart.setDiscounts(cartDTO.getDiscounts());
-        cart.setTotal(cartDTO.getTotal());
+        cart.setDiscounts(cartBareDTO.getDiscounts());
+        cart.setTotal(cartBareDTO.getTotal());
         cart.setEntriesList(cartEntryList);
-        cart.setTotalTax(cartDTO.getTotal());
-        cart.setSubtotal(cartDTO.getSubtotal());
+        cart.setTotalTax(cartBareDTO.getTotal());
+        cart.setSubtotal(cartBareDTO.getSubtotal());
         cart.setShippingAddress(shippingAddress.orElse(null));
         cart.setBillingAddress(billingAddress.orElse(null));
         return cart;

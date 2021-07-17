@@ -1,10 +1,12 @@
 package com.chandranedu.api.cart.service;
 
 import com.chandranedu.api.cart.beans.Address;
+import com.chandranedu.api.cart.dto.AddressBareDTO;
 import com.chandranedu.api.cart.dto.AddressDTO;
 import com.chandranedu.api.cart.repository.AddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +15,7 @@ import static com.chandranedu.api.cart.mapper.AddressMapper.mapToAddress;
 import static com.chandranedu.api.cart.mapper.AddressMapper.mapToAddressDTO;
 
 @Service
+@Transactional
 public class AddressService {
 
     private final AddressRepository addressRepository;
@@ -20,6 +23,10 @@ public class AddressService {
     @Autowired
     public AddressService(AddressRepository addressRepository) {
         this.addressRepository = addressRepository;
+    }
+
+    private static RuntimeException addressNotFound() {
+        return new RuntimeException("Address not found");
     }
 
     public List<Address> getAddress() {
@@ -34,15 +41,13 @@ public class AddressService {
         return addressRepository.save(address);
     }
 
-    public AddressDTO saveAddress(AddressDTO addressDTO) {
+    public AddressDTO saveAddress(AddressBareDTO addressBareDTO) {
 
         //TODO address validation
-        final Optional<Address> address = mapToAddress(addressDTO);
-        if (address.isEmpty()) {
-            throw new RuntimeException("Heelo");
-        }
-        final Address saveAddress = addressRepository.save(address.get());
-        final Optional<AddressDTO> addressDTO1 = mapToAddressDTO(saveAddress);
-        return addressDTO1.get();
+        final Address address = mapToAddress(addressBareDTO)
+                .orElseThrow(AddressService::addressNotFound);
+        final Address saveAddress = addressRepository.save(address);
+        return mapToAddressDTO(saveAddress)
+                .orElse(null);
     }
 }

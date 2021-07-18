@@ -168,6 +168,28 @@ POST ​/api​/v1​/carts​/{cart-code}​/cart-entries
     ibmcloud target --cf
     ibmcloud cf push  -f cloudfoundry/manifest.yml  --vars-file cloudfoundry/dev-vars.yml
 ## Kubernetes
+
+##### Image registry location required
+
+k8s folder '01-k8s-deployment.yaml'
+  
+    image: <dockerimage-registry-location>/ms-cart:latest
+    
+    Example:
+    image: localhost:5000/ms-cart:latest
+    
+Below setup to build docker image:    
+ 
+     docker build . -t <dockerimage-registry-location>/ms-cart:2021.07.01
+     docker push <dockerimage-registry-location>/ms-cart:2021.07.01
+     docker tag <dockerimage-registry-location>/ms-cart:2021.07.01 <dockerimage-registry-location>/ms-cart:latest
+     docker push <dockerimage-registry-location>/ms-cart:latest
+    
+    Example:    
+    docker build . -t localhost:5000/ms-cart:2021.07.01
+    docker push localhost:5000/ms-cart:2021.07.01
+    docker tag localhost:5000/ms-cart:2021.07.01 localhost:5000/ms-cart:latest
+    docker push localhost:5000/ms-cart:latest
     
   At first time, application setup execute: 'kubectl-execute-dev.bat'
   

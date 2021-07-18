@@ -169,7 +169,7 @@ POST ​/api​/v1​/carts​/{cart-code}​/cart-entries
     ibmcloud cf push  -f cloudfoundry/manifest.yml  --vars-file cloudfoundry/dev-vars.yml
 ## Kubernetes
 
-##### Image registry location required
+##### Update required for docker Image registry location
 
 k8s folder '01-k8s-deployment.yaml'
   

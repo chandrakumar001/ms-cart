@@ -11,7 +11,7 @@ public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "address_seq")
-    @SequenceGenerator(name = "address_seq", sequenceName = "address_seq", initialValue = 1, allocationSize = 1)
+    @SequenceGenerator(schema = "cart", name = "address_seq", sequenceName = "address_seq", initialValue = 1, allocationSize = 1)
     private Long id;
     private String streetName;
     private String streetNumber;
